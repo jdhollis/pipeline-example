@@ -78,8 +78,9 @@ module "prod" {
 module "pipeline" {
   source = "github.com/jdhollis/deployment-pipeline"
 
-  github_token = var.github_token
-  github_user  = var.github_user
+  github_repo_owner = var.github_repo_owner
+  github_token      = var.github_token
+  github_user       = var.github_user
 
   env_deployer_policy_json = {
     stage = module.stage.json
