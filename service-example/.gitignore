@@ -1,0 +1,5 @@
+*.tfstate*
+.terraform
+pipeline/terraform.tfvars
+plan
+user.tfvars

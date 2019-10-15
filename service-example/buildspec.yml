@@ -1,0 +1,27 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.7
+    commands:
+      - pip3 install awscli --upgrade --user
+  pre_build:
+    commands:
+      - eval `ssh-agent -s`
+      - aws ssm get-parameter --with-decryption --name "$GITHUB_PK_PARAM_PATH" --output text --query Parameter.Value | ssh-add -q -
+  build:
+    commands:
+      - cd $CODEBUILD_SRC_DIR
+      - sh bin/build.sh
+  post_build:
+    commands:
+      - mkdir plan
+      - cp *.tf plan/
+      - cp stage.tfvars prod.tfvars plan/
+      # TODO: Copy any build artifacts or additional Terraform modules to plan/ here.
+
+artifacts:
+  base-directory: plan
+  files:
+    - '**/*'

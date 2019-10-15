@@ -1,0 +1,30 @@
+version: 0.2
+
+env:
+  variables:
+    TERRAFORM_VERSION: 0.12.10
+    TERRAFORM_SHA256: 2215208822f1a183fb57e24289de417c9b3157affbe8a5e520b768edbcb420b4
+    TF_IN_AUTOMATION: 1
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.7
+    commands:
+      - cd /tmp && curl -o terraform.zip https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip && echo "${TERRAFORM_SHA256} terraform.zip" | sha256sum -c --quiet && unzip terraform.zip && mv terraform /usr/bin
+  pre_build:
+    commands:
+      - cp -R $CODEBUILD_SRC_DIR /tmp/service-example
+      - cd /tmp/service-example
+  build:
+    commands:
+      - terraform init -no-color -input=false -backend-config "bucket=${TERRAFORM_STATE_BUCKET}" -backend-config "key=ethereum-registration/terraform.tfstate" -backend-config "region=${TERRAFORM_STATE_REGION}" -backend-config "dynamodb_table=${TERRAFORM_STATE_LOCKING_TABLE}" -backend-config "kms_key_id=${TERRAFORM_STATE_KMS_KEY_ARN}"
+      - terraform plan -no-color -input=false -var "assume_role_arn=${ASSUME_ROLE_ARN}" -var-file ${TARGET_ENVIRONMENT}.tfvars -out plan
+  post_build:
+    commands:
+      - mv buildspec.apply.yml buildspec.yml
+
+artifacts:
+  base-directory: /tmp/service-example
+  files:
+    - '**/*'
