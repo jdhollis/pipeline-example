@@ -1,0 +1,6 @@
+[submodule "deployment-pipeline"]
+	path = deployment-pipeline
+	url = git@github.com:jdhollis/deployment-pipeline.git
+[submodule "remote-state"]
+	path = remote-state
+	url = git@github.com:jdhollis/remote-state.git
