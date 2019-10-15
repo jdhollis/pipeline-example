@@ -76,7 +76,7 @@ module "prod" {
 }
 
 module "pipeline" {
-  source = "github.com/jdhollis/deployment-pipeline"
+  source = "../../deployment-pipeline"
 
   github_repo_owner = var.github_repo_owner
   github_token      = var.github_token
