@@ -86,9 +86,9 @@ module "pipeline" {
     prod  = module.prod.json
   }
 
-  region              = var.region
-  remote_state_bucket = "[PREFIX]-tools-terraform-state" # TODO: Insert remote state bucket name here.
-  remote_state_key    = "remote-state/terraform.tfstate" # TODO: Insert remote state key here.
+  region                     = var.region
+  remote_state_bucket        = "[PREFIX]-tools-terraform-state"         # TODO: Insert remote state bucket name here.
+  remote_state_locking_table = "[PREFIX]-tools-terraform-state-locking" # TODO: Insert remote state locking table name here.
 
   # TODO: Add any required services here to ensure access to the necessary state files.
   #  required_services = [
