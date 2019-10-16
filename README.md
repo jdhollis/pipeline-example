@@ -1,3 +1,3 @@
 # Pipeline Example
 
-This is it.
+An example of a multi-account automated deployment pipeline.
